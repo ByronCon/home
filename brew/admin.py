@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from brew.models import Recipe, Batch, Measurement, Bottling
+from brew.models import Recipe, Batch, Measurement, Bottling, BottleType, GravityType
 
 admin.site.register(Recipe)
 admin.site.register(Batch)
