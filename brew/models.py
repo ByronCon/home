@@ -1,10 +1,18 @@
 import datetime
 from django.db import models
 from django.utils import timezone
+from django.utils.timezone import localtime
 
 # Master data
 class GravityType(models.Model):
-    gravity_type_text = models.CharField(max_length=200)
+    # ...
+
+    # return friendly name
+    def __str__(self):
+        return self.gravity_type_text
+
+    gravity_type_text = models.CharField(max_length=10)
+    gravity_type_description = models.CharField(max_length=200)
 
 class BottleType(models.Model):
     bottle_type_text = models.CharField(max_length=200)
@@ -15,6 +23,7 @@ class Recipe(models.Model):
     # ...
     def __str__(self):
         return self.recipe_text
+
     recipe_text = models.CharField(max_length=200)
     recipe_ingredients = models.CharField(max_length=200)
 
@@ -29,7 +38,10 @@ class Batch(models.Model):
 
 class Measurement(models.Model):
     def __str__(self):
-        return self.measurement_date
+        return str(localtime(self.measurement_date))
+    # must return string otherwise list works but detail errors.
+    # str() function defaults to UTC
+
     batch = models.ForeignKey(Batch)
     measurement_date = models.DateTimeField('date measured')
     gravity_type = models.ForeignKey(GravityType)
