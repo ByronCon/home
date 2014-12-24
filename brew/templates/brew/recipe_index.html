@@ -1,0 +1,9 @@
+{% if recipe_list %}
+    <ul>
+    {% for recipe in recipe_list %}
+        <li><a href="{% url 'brew:recipe_detail' recipe.id %}"> {{ recipe.recipe_text}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No recipes defined.</p>
+{% endif %}
