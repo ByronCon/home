@@ -3,61 +3,82 @@ from django.db import models
 from django.utils import timezone
 from django.utils.timezone import localtime
 
+
 # Master data
 class GravityType(models.Model):
     # ...
     # return friendly name
     def __str__(self):
-        return self.text
+        return self.name
 
     name = models.CharField(max_length=2)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
+
 
 class BottleType(models.Model):
+    def __str__(self):
+        return self.name
+
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
     size = models.PositiveIntegerField()
 
 class Ingredient(models.Model):
     # Ingredients for use in a recipe
-    name = models.CharField(max_length=100)         # Brewers Sugar
-    quantity = models.PositiveIntegerField(default=1)        # 1
-    size = models.DecimalField(max_digits=5, decimal_places=2, blank=True)  # 500
-    unit = models.CharField(max_length=3)           # g
-    cost = models.DecimalField(default=0.00)          # 3.56
-    currency = models.CharField(default='AUD')      # AUD
+    def __str__(self):
+        return self.name
+
+    name = models.CharField(max_length=100)                                                         # Brewers Sugar
+    quantity = models.PositiveIntegerField(default=1)                                               # 1
+    size = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)               # 500
+    unit = models.CharField(max_length=3, blank=True, null=True)                                    # g
+    cost = models.DecimalField(max_digits=6, decimal_places=2, default=0.00, blank=True, null=True)  # 3.56
+    currency = models.CharField(max_length=3, default='AUD', blank=True, null=True)                 # AUD
+    # recipe = models.ManyToManyField(Recipe)  # which model should this live in? Who knows. Primary model has access via
+    # .<object>.all() while alternate has .<object>_set.all(). Recipe.ingredient_set.all() sounds better than
+    # Ingredient.recipe_set.all()  Most likely a user is looking for recipe and finding ingredients, not looking
+    # from ingredient to recipe.
+    # Arrrgh! Admin implies the opposite.
+    # Publication = recipe
+    # Article = Ingredient
+
 
 # Transactional data
 class Recipe(models.Model):
     # Stores a recipe. Recipe has many ingredients
     def __str__(self):
-        return self.text
+        return self.name
 
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=200, blank=True)
-    ingredient = models.ManyToManyField(Ingredient)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    ingredient = models.ManyToManyField(Ingredient)  # Refer above
+
 
 class Batch(models.Model):
-    # What is's all about
+    # What it's all about
     def __str__(self):
-        return self.batch_text
+        return self.name
 
+    name = models.CharField(max_length=100, blank=True, null=True)
     recipe = models.ForeignKey(Recipe)
-    name = models.CharField(max_length=100, blank=True)
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
     start_date = models.DateTimeField('date brewed')
 
+
 class Measurement(models.Model):
+    # Reading of temperature and/or gravity
     def __str__(self):
-        return str(localtime(self.measurement_date))
+        return str(localtime(self.date))
 
     batch = models.ForeignKey(Batch)
     date = models.DateTimeField('date measured')
     gravity_type = models.ForeignKey(GravityType)
-    gravity = models.DecimalField(max_digits=4, decimal_places=3, blank=True)
-    temperature = models.IntegerField(blank=True)
+    gravity = models.DecimalField(max_digits=4, decimal_places=3, blank=True, null=True)
+    temperature = models.IntegerField(blank=True, null=True)
+
 
 class Bottling(models.Model):
+    # Bottlings of a batch. May be more than one per batch
     def __str__(self):
         return self.date_bottled
 
@@ -69,7 +90,7 @@ class Bottling(models.Model):
     date_bottled = models.DateTimeField('date bottled')
     bottle_type = models.ForeignKey(BottleType)
     num_bottles = models.IntegerField(default=0)
-    markings = models.CharField(max_length=10, blank=True)
-    notes = models.CharField(max_length=200, blank=True)
+    markings = models.CharField(max_length=10, blank=True, null=True)
+    notes = models.CharField(max_length=200, blank=True, null=True)
 
 

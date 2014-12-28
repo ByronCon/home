@@ -1,5 +1,16 @@
 Things to do:
 
-    1. Redefine Model
-        reviewed up to ingredient
-    2. Enter data and test
+Common:
+    Do:
+
+    Done:
+        - Redefine Model
+
+Recipes:
+    * Fix friendly name. As name is optional, this can't be the friendly name
+    * Create detail page
+
+
+Admin:
+    * Work out how to collapse inlines in admin (eg. measurements in batch)
+    * Enter data and test

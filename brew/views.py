@@ -9,10 +9,12 @@ from brew.models import Recipe
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
 
+
 def wip(request):
     return HttpResponse("Hello, world. You're at a WIP page.")
 
-### Recipe
+
+# ## Recipe
 # Index page
 def recipe_index(request):
     recipe_list = Recipe.objects.all()
@@ -24,4 +26,8 @@ def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
     return render(request, 'brew/recipe_detail.html', {'recipe': recipe})
 
+
+def recipe_update(request, recipe_id):
+    r = Recipe.objects.get(pk=1)
+    return HttpResponse("You're trying to change " + r.name)
 

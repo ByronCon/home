@@ -10,10 +10,13 @@ urlpatterns = patterns('',
     url(r'^prepare/$', views.recipe_index, name='recipe_index'),
 
     # Recipe detail     - ex: /brew/prepare/1/
-    url(r'^prepare/(?P<recipe_id>\d+)/', views.recipe_detail, name='recipe_detail'),
+    url(r'^prepare/(?P<recipe_id>\d+)/$', views.recipe_detail, name='recipe_detail'),
 
-    #ex: /brew/prepare/1/
-    #url(r'^prepare/(?P<recipe_id>\d+)/', views.prepare, name='prepare'),
+    # Recipe Change
+    url(r'^prepare/(?P<recipe_id>\d+)/update/$', views.recipe_update, name='recipe_update'),
+
+    # ex: /brew/prepare/1/
+    # url(r'^prepare/(?P<recipe_id>\d+)/', views.prepare, name='prepare'),
 
     url(r'^ferment', views.wip, name='ferment'),
     url(r'^measure', views.wip, name='measure'),
