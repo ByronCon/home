@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+
+{% if batch_list %}
+    <ul>
+    {% for batch in batch_list %}
+        <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No recipes defined.</p>
+{% endif %}
+

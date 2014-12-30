@@ -1,11 +1,15 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, Http404
 from django.template import RequestContext, loader
+from django.core.urlresolvers import reverse
+from django.views import generic
 
-from brew.models import Recipe
+from brew.models import Recipe, Batch
 
 
-# Create your views here.
+
+
+# ## Generic Views
 def index(request):
     return HttpResponse("Hello, world. You're at the index.")
 
@@ -28,6 +32,23 @@ def recipe_detail(request, recipe_id):
 
 
 def recipe_update(request, recipe_id):
-    r = Recipe.objects.get(pk=1)
-    return HttpResponse("You're trying to change " + r.name)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    return render(request, 'brew/recipe_detail.html', {
+            'recipe': recipe,
+            'error_message': "You are trying to change " + recipe.name,
+        })
 
+
+# ## Batch
+# Index page
+class BatchIndexView(generic.ListView):
+    #template_name = 'brew/batch_index.html'
+    #context_object_name = 'batch_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Batch.objects.all()
+
+class BatchDetailView(generic.DetailView):
+    model = Batch
+    #template_name = 'brew/batch_detail.html'

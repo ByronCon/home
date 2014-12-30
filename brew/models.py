@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import localtime
-
+from django.utils.encoding import force_text
 
 # Master data
 class GravityType(models.Model):
@@ -22,6 +22,7 @@ class BottleType(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True, null=True)
     size = models.PositiveIntegerField()
+    unit = models.CharField(max_length=3)
 
 class Ingredient(models.Model):
     # Ingredients for use in a recipe
@@ -57,7 +58,16 @@ class Recipe(models.Model):
 class Batch(models.Model):
     # What it's all about
     def __str__(self):
-        return self.name
+        if self.name == '':
+            friendly = 'Unnamed'
+        else:
+                friendly = self.name
+        friendly = friendly + ' (' + force_text(self.recipe) +  ')'
+        return  friendly
+
+    def is_in_fermenter(self):
+        # Return if the batch is still sitting in the fermenter.
+        return self.bottling_set.count() == 0
 
     name = models.CharField(max_length=100, blank=True, null=True)
     recipe = models.ForeignKey(Recipe)
@@ -80,7 +90,7 @@ class Measurement(models.Model):
 class Bottling(models.Model):
     # Bottlings of a batch. May be more than one per batch
     def __str__(self):
-        return self.date_bottled
+        return str(localtime(self.date_bottled))
 
     def was_bottled_recently(self): # bottled in 21 days
         return self.date_bottled >= timezone.now() - datetime.timedelta(days=21)

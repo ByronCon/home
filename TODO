@@ -8,7 +8,19 @@ Common:
 
 Recipes:
     * Fix friendly name. As name is optional, this can't be the friendly name
+
     * Create detail page
+        *
+
+
+Batch
+    Historical
+        * Create list screen
+
+
+Measurement
+
+Bottling
 
 
 Admin:
