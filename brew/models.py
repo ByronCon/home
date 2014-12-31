@@ -65,9 +65,23 @@ class Batch(models.Model):
         friendly = friendly + ' (' + force_text(self.recipe) +  ')'
         return  friendly
 
-    def is_in_fermenter(self):
-        # Return if the batch is still sitting in the fermenter.
-        return self.bottling_set.count() == 0
+    def is_fermented(self):
+        "If FG has been recorded, it's no longer fermenting"
+        return self.measurement_set.filter(gravity_type__name="FG").count() > 0
+
+    def is_bottled(self):
+        "Has the beer been bottled yet? Two states; yes & no. May need to introduce a third for partially"
+        return self.bottling_set.count() <> 0
+
+    def state(self):
+        "What state is the beer in?"
+        if self.is_bottled():
+            state = "bottled"
+        elif self.is_fermented():
+            state = "ready to bottle"
+        else:
+            state = "fermenting"
+        return state
 
     name = models.CharField(max_length=100, blank=True, null=True)
     recipe = models.ForeignKey(Recipe)

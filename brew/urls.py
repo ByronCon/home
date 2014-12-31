@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 
     # ## Batch
     # Index """
-    url(r'^ferment/$', views.BatchIndexView.as_view(), name='ferment'),
+    url(r'^ferment/$', views.BatchIndexView.as_view(), name='batch_index    '),
     # Detail
     url(r'^ferment/(?P<pk>\d+)/$', views.BatchDetailView.as_view(), name='batch_detail'),
 

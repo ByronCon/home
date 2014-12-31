@@ -3,12 +3,11 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <a href="{% url 'brew:recipe_detail' batch.recipe.id %}"> {{ batch.recipe }} </a><br>
-{% if batch.is_in_fermenter %} Brewing! {% else %} bottled {% endif %} <br>
-
 
 Started: {{ batch.start_date }} <br>
-Bottled: {{ batch.date_bottled }}
+State: {{ batch.state }} <br>
+
 
 
 <br>
-<a href="#"> <button>New Batch</button> </a>
+<a href="{% url 'brew:batch_index' %}">Back</a>
