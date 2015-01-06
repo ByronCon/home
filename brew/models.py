@@ -35,13 +35,6 @@ class Ingredient(models.Model):
     unit = models.CharField(max_length=3, blank=True, null=True)                                    # g
     cost = models.DecimalField(max_digits=6, decimal_places=2, default=0.00, blank=True, null=True)  # 3.56
     currency = models.CharField(max_length=3, default='AUD', blank=True, null=True)                 # AUD
-    # recipe = models.ManyToManyField(Recipe)  # which model should this live in? Who knows. Primary model has access via
-    # .<object>.all() while alternate has .<object>_set.all(). Recipe.ingredient_set.all() sounds better than
-    # Ingredient.recipe_set.all()  Most likely a user is looking for recipe and finding ingredients, not looking
-    # from ingredient to recipe.
-    # Arrrgh! Admin implies the opposite.
-    # Publication = recipe
-    # Article = Ingredient
 
 
 # Transactional data
@@ -65,19 +58,31 @@ class Batch(models.Model):
         friendly = friendly + ' (' + force_text(self.recipe) +  ')'
         return  friendly
 
+    @property
+    def age(self):
+        " How old is the batch. Only valuable while in fermenter"
+        return (timezone.now() - self.date).days + ((timezone.now() - self.date).seconds / 60 / 60 / 24)
+
+    @property
     def is_fermented(self):
         "If FG has been recorded, it's no longer fermenting"
         return self.measurement_set.filter(gravity_type__name="FG").count() > 0
 
+    @property
     def is_bottled(self):
         "Has the beer been bottled yet? Two states; yes & no. May need to introduce a third for partially"
-        return self.bottling_set.count() <> 0
+        return self.bottling_set.count() != 0
 
+    @property
+    def original_gravity(self):
+        return self.measurement_set.filter(gravity_type__name="OG").get().gravity
+
+    @property
     def state(self):
         "What state is the beer in?"
-        if self.is_bottled():
+        if self.is_bottled:
             state = "bottled"
-        elif self.is_fermented():
+        elif self.is_fermented:
             state = "ready to bottle"
         else:
             state = "fermenting"
@@ -86,7 +91,7 @@ class Batch(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     recipe = models.ForeignKey(Recipe)
     description = models.CharField(max_length=200, blank=True, null=True)
-    start_date = models.DateTimeField('date brewed')
+    date = models.DateTimeField('date brewed')
 
 
 class Measurement(models.Model):
@@ -104,14 +109,30 @@ class Measurement(models.Model):
 class Bottling(models.Model):
     # Bottlings of a batch. May be more than one per batch
     def __str__(self):
-        return str(localtime(self.date_bottled))
+        return str(localtime(self.date))
 
     def was_bottled_recently(self): # bottled in 21 days
-        return self.date_bottled >= timezone.now() - datetime.timedelta(days=21)
+        return self.date >= timezone.now() - datetime.timedelta(days=21)
+
+    @property
+    def abv(self):
+        "Return ABV % of the bottling"
+        return 131 * (self.batch.original_gravity - self.final_measurement.gravity)
+
+    @property
+    def days_fermenting(self):
+        "Return days in fermenter"
+        age = (self.date - self.batch.date)
+        return age.days
+
+    @property
+    def age(self):
+        "Return days since bottled"
+        return (timezone.now() - self.date).days
 
     batch = models.ForeignKey(Batch)
     final_measurement = models.ForeignKey(Measurement)
-    date_bottled = models.DateTimeField('date bottled')
+    date = models.DateTimeField('date bottled')
     bottle_type = models.ForeignKey(BottleType)
     num_bottles = models.IntegerField(default=0)
     markings = models.CharField(max_length=10, blank=True, null=True)

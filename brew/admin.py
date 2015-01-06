@@ -12,13 +12,13 @@ class MeasurementInline(admin.StackedInline):
 
 class BatchAdmin(admin.ModelAdmin):
     # list view
-    list_display = ('name', 'recipe', 'start_date')
+    list_display = ('name', 'recipe', 'date')
     sort_field = {'start_date'}
 
     # detail view
     fieldsets = [
         (None,               {'fields': ['recipe', 'name']}),
-        ('Date information', {'fields': ['start_date'], 'classes': ['collapse']}),
+        ('Date information', {'fields': ['date'], 'classes': ['collapse']}),
     ]
     inlines = [MeasurementInline]
 
