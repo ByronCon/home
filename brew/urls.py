@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     # Index
 
     # Detail
-    url(r'^bottle/(?P<pk>\d+)/$', views.wip, name='bottling_detail'),
+    url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
 
     url(r'^measure', views.wip, name='measure'),
     url(r'^bottle', views.wip, name='bottle'),

@@ -4,7 +4,7 @@ from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.views import generic
 
-from brew.models import Recipe, Batch
+from brew.models import Recipe, Batch, Bottling
 
 
 
@@ -52,3 +52,8 @@ class BatchIndexView(generic.ListView):
 class BatchDetailView(generic.DetailView):
     model = Batch
     #template_name = 'brew/batch_detail.html'
+
+
+# ## Bottling
+class BottlingDetailView(generic.DetailView):
+    model = Bottling
