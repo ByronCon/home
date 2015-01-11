@@ -10,4 +10,13 @@
 {% endfor %}
 <input type="submit" value="Remove" />
 </form>
+
+Past Brews:
+
+<ol>
+    {% for batches in recipe.batch_set.all.order_by('-date') %}
+        <li>{{ batches }}</li>
+    {% endfor %}
+</ol>
 <a href="#"> <button>New Batch</button </a>
+

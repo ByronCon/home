@@ -6,11 +6,13 @@
 
 Started: {{ batch.date }} <br>
 State: {{ batch.state }} <br>
+Age: {{ batch.age }} <br>
 
-{% for bottling in batch.bottling_set.all %}
+<ol>
+    {% for bottling in batch.bottling_set.all %}
     <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
-    <li>{{ batch.age }}</li>
 {% endfor %}
+</ol>
 
 <br>
 <a href="{% url 'brew:batch_index' %}">Back</a>
