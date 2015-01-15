@@ -49,6 +49,10 @@ class Recipe(models.Model):
 
 
 class Batch(models.Model):
+    class Meta:
+        ordering = ['-date']
+
+
     # What it's all about
     def __str__(self):
         if self.name == '':

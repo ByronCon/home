@@ -1,14 +1,17 @@
-{% load staticfiles %}
+{% extends "brew/base.html" %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+{% block title %}Ferment{% endblock title %}
 
-{% if batch_list %}
-    <ul>
-    {% for batch in batch_list %}
-        <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No recipes defined.</p>
-{% endif %}
+{% block content %}
 
+    {% if batch_list %}
+        <ul>
+        {% for batch in batch_list %}
+            <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recipes defined.</p>
+    {% endif %}
+
+{% endblock content %}

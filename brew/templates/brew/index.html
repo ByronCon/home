@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% extends "brew/base.html" %}
 
-<a href="./prepare/">Prepare</a>
+{% block title %}Brew{% endblock title %}
 
-</body>
-</html>
+{% block content %}
+	<ul>
+	<li><a href="{% url 'brew:recipe_index' %}">Prepare</a></li>
+	<li><a href="{% url 'brew:batch_index' %}">Ferment</a></li>
+	<li><a href="{% url 'brew:bottling_index' %}">Bottling</a></li>
+	</ul>
+{% endblock content %}

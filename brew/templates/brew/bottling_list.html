@@ -1,0 +1,16 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Bottle{% endblock title %}
+
+{% block content %}
+    {% if bottling_list %}
+        <ul>
+        {% for bottling in bottling_list %}
+            <li><a href="{% url 'brew:bottling_detail' bottling.id %}"> {{ bottling }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bottlings defined.</p>
+    {% endif %}
+
+{% endblock content %}

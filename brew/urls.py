@@ -4,7 +4,8 @@ from brew import views
 
 urlpatterns = patterns('',
     #ex: /brew/
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.HomePageView.as_view(),name='index'),
+
 
     # Recipe index      - ex: /brew/prepare
     url(r'^prepare/$', views.recipe_index, name='recipe_index'),
@@ -21,10 +22,12 @@ urlpatterns = patterns('',
     url(r'^ferment/$', views.BatchIndexView.as_view(), name='batch_index'),
     # Detail
     url(r'^ferment/(?P<pk>\d+)/$', views.BatchDetailView.as_view(), name='batch_detail'),
-
+    # Create
+    url(r'^ferment/new/(?P<recipe_id>\d+)/$', views.wip2, name='batch_create'),
 
     # ## Bottling
     # Index
+    url(r'bottle/$', views.BottlingIndexView.as_view(), name='bottling_index'),
 
     # Detail
     url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
@@ -33,4 +36,3 @@ urlpatterns = patterns('',
     url(r'^bottle', views.wip, name='bottle'),
     url(r'^enjoy', views.wip, name='enjoy'),
 )
-              #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

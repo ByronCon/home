@@ -1,9 +1,17 @@
-{% if recipe_list %}
-    <ul>
-    {% for recipe in recipe_list %}
-        <li><a href="{% url 'brew:recipe_detail' recipe.id %}"> {{ recipe.name}}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No recipes defined.</p>
-{% endif %}
+{% extends "brew/base.html" %}
+
+{% block title %}Prepare{% endblock title %}
+
+{% block content %}
+
+    {% if recipe_list %}
+        <ul>
+        {% for recipe in recipe_list %}
+            <li><a href="{% url 'brew:recipe_detail' recipe.id %}"> {{ recipe.name}}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recipes defined.</p>
+    {% endif %}
+
+{% endblock content %}

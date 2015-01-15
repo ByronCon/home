@@ -4,17 +4,22 @@ from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.views import generic
 
+from django.views.generic.base import TemplateView
+
 from brew.models import Recipe, Batch, Bottling
 
 
 
 
 # ## Generic Views
-def index(request):
-    return HttpResponse("Hello, world. You're at the index.")
+class HomePageView(TemplateView):
+    template_name = "brew/index.html"
 
 
 def wip(request):
+    return HttpResponse("Hello, world. You're at a WIP page.")
+
+def wip2(request, recipe_id):
     return HttpResponse("Hello, world. You're at a WIP page.")
 
 
@@ -46,14 +51,20 @@ class BatchIndexView(generic.ListView):
     #context_object_name = 'batch_list'
 
     def get_queryset(self):
-        """Return the last five published questions."""
+        """Return all batches."""
         return Batch.objects.all()
 
 class BatchDetailView(generic.DetailView):
     model = Batch
-    #template_name = 'brew/batch_detail.html'
 
 
 # ## Bottling
+class BottlingIndexView(generic.ListView):
+    def get_queryset(self):
+        """Return all bottlings."""
+        return Bottling.objects.all()
+
+
 class BottlingDetailView(generic.DetailView):
     model = Bottling
+

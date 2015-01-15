@@ -1,18 +1,26 @@
-<h1>{{ batch }}</h1>
+{% extends "brew/base.html" %}
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% block title %}Ferment{% endblock %}
 
-<a href="{% url 'brew:recipe_detail' batch.recipe.id %}"> {{ batch.recipe }} </a><br>
+{% block content %}
 
-Started: {{ batch.date }} <br>
-State: {{ batch.state }} <br>
-Age: {{ batch.age }} <br>
+    <h1>{{ batch }}</h1>
 
-<ol>
-    {% for bottling in batch.bottling_set.all %}
-    <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
-{% endfor %}
-</ol>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<br>
-<a href="{% url 'brew:batch_index' %}">Back</a>
+    <a href="{% url 'brew:recipe_detail' batch.recipe.id %}"> {{ batch.recipe }} </a><br>
+
+    Started: {{ batch.date }} <br>
+    State: {{ batch.state }} <br>
+    Age: {{ batch.age }} <br>
+
+    <ol>
+        {% for bottling in batch.bottling_set.all %}
+        <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
+    {% endfor %}
+    </ol>
+
+    <br>
+    <a href="{% url 'brew:batch_index' %}">Back</a>
+
+{% endblock %}

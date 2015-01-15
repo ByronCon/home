@@ -1,3 +1,9 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Prepare{% endblock title %}
+
+{% block content %}
+
 <h1>{{ recipe }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -14,9 +20,13 @@
 Past Brews:
 
 <ol>
-    {% for batches in recipe.batch_set.all.order_by('-date') %}
-        <li>{{ batches }}</li>
+    {% for batch in recipe.batch_set.all %}
+        <li><a href="{% url 'brew:batch_detail' batch.id %}">{{ batch }}</a></li>
     {% endfor %}
 </ol>
-<a href="#"> <button>New Batch</button </a>
 
+<a href="{% url 'brew:batch_create' recipe.id %}"> </a>
+
+<a href="/brew/"><input type="submit" value="New Batch" /></a>
+
+{% endblock content %}
