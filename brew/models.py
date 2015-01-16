@@ -134,12 +134,28 @@ class Bottling(models.Model):
         "Return days since bottled"
         return (timezone.now() - self.date).days
 
+    @property
+    def all_gone(self):
+        """ Are there any beers left? """
+        return self.num_remaining > 0
+        #return false
+
+
     batch = models.ForeignKey(Batch)
     final_measurement = models.ForeignKey(Measurement)
     date = models.DateTimeField('date bottled')
     bottle_type = models.ForeignKey(BottleType)
     num_bottles = models.IntegerField(default=0)
+    num_bottled = models.IntegerField(default=0)
+    num_remaining = models.IntegerField(default=0)
     markings = models.CharField(max_length=10, blank=True, null=True)
     notes = models.CharField(max_length=200, blank=True, null=True)
 
+
+class Sampling(models.Model):
+    """What does the beer taste like"""
+    bottling = models.ForeignKey(Bottling)
+    date = models.DateTimeField('date sampled')
+    rating = models.IntegerField(default=0)
+    comment = models.CharField(max_length=200, blank=True, null=True)
 

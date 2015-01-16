@@ -9,6 +9,15 @@
             <li><a href="{% url 'brew:bottling_detail' bottling.id %}"> {{ bottling }}</a></li>
         {% endfor %}
         </ul>
+
+        <div class="row">
+            <div class="span2">Batch</div>
+            <div class="span2">Recipe</div>
+            <div class="span2">Date Bottled</div>
+            <div class="span1">Num Left</div>
+            <div class="span1">ABV</div>
+
+        </div>
     {% else %}
         <p>No bottlings defined.</p>
     {% endif %}
