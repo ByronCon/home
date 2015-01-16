@@ -24,17 +24,18 @@ class BottleType(models.Model):
     size = models.PositiveIntegerField()
     unit = models.CharField(max_length=3)
 
+
 class Ingredient(models.Model):
     # Ingredients for use in a recipe
     def __str__(self):
         return self.name
 
-    name = models.CharField(max_length=100)                                                         # Brewers Sugar
-    quantity = models.PositiveIntegerField(default=1)                                               # 1
-    size = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)               # 500
-    unit = models.CharField(max_length=3, blank=True, null=True)                                    # g
+    name = models.CharField(max_length=100)  # Brewers Sugar
+    quantity = models.PositiveIntegerField(default=1)  # 1
+    size = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # 500
+    unit = models.CharField(max_length=3, blank=True, null=True)  # g
     cost = models.DecimalField(max_digits=6, decimal_places=2, default=0.00, blank=True, null=True)  # 3.56
-    currency = models.CharField(max_length=3, default='AUD', blank=True, null=True)                 # AUD
+    currency = models.CharField(max_length=3, default='AUD', blank=True, null=True)  # AUD
 
 
 # Transactional data
@@ -58,9 +59,9 @@ class Batch(models.Model):
         if self.name == '':
             friendly = 'Unnamed'
         else:
-                friendly = self.name
-        friendly = friendly + ' (' + force_text(self.recipe) +  ')'
-        return  friendly
+            friendly = self.name
+        friendly = friendly + ' (' + force_text(self.recipe) + ')'
+        return friendly
 
     @property
     def age(self):
@@ -115,7 +116,7 @@ class Bottling(models.Model):
     def __str__(self):
         return str(localtime(self.date))
 
-    def was_bottled_recently(self): # bottled in 21 days
+    def was_bottled_recently(self):  # bottled in 21 days
         return self.date >= timezone.now() - datetime.timedelta(days=21)
 
     @property
@@ -125,27 +126,32 @@ class Bottling(models.Model):
 
     @property
     def days_fermenting(self):
-        "Return days in fermenter"
+        """ Return days in fermenter """
         age = (self.date - self.batch.date)
         return age.days
 
     @property
     def age(self):
-        "Return days since bottled"
+        """ Return days since bottled """
         return (timezone.now() - self.date).days
 
     @property
     def all_gone(self):
-        """ Are there any beers left? """
+        """ Are there any beers leftt? """
         return self.num_remaining > 0
-        #return false
+        # return false
 
+    @property
+    def is_drinkable_in(self):
+        """  How many days to go before drinkable (not ready: -ve, ready: +ve) """
+        # return self.was_bottled_recently()
+        return (timezone.now() - (self.date + datetime.timedelta(days=21))).days
 
     batch = models.ForeignKey(Batch)
     final_measurement = models.ForeignKey(Measurement)
     date = models.DateTimeField('date bottled')
     bottle_type = models.ForeignKey(BottleType)
-    #num_bottles = models.IntegerField(default=0)
+    # num_bottles = models.IntegerField(default=0)
     num_bottled = models.IntegerField(default=0)
     num_remaining = models.IntegerField(default=0)
     markings = models.CharField(max_length=10, blank=True, null=True)

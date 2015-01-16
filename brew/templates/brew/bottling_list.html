@@ -4,20 +4,44 @@
 
 {% block content %}
     {% if bottling_list %}
-        <ul>
-        {% for bottling in bottling_list %}
-            <li><a href="{% url 'brew:bottling_detail' bottling.id %}"> {{ bottling }}</a></li>
-        {% endfor %}
-        </ul>
+        <div class="table-responsive">
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Batch</th>
+                        <th>Recipe</th>
+                        <th>Date Bottled</th>
+                        <th>Ready</th>
+                        <th class="text-right">Beers Left</th>
+                        <th class="text-right">ABV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bottling in bottling_list %}
+                    <tr>
+                        <th scope="row">{{ bottling.id }}</th>
+                        <td><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.batch }}</a> </td>
+                        <td>{{ bottling.batch.recipe }}</td>
+                        <td>{{ bottling.date }}</td>
+                        <td class="{% if bottling.is_drinkable_in > 0 %}success
+                                   {% elif bottling.is_drinkable_in > -6 %}warning
+                                   {% else %}danger
+                                   {% endif %}">{{ bottling.is_drinkable_in }}</td>
+                        <td class="text-right">{{ bottling.num_remaining }}</td>
+                        <td class="text-right">{{ bottling.abv }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div> <!-- .table-responsive -->
 
-        <div class="row">
-            <div class="span2">Batch</div>
-            <div class="span2">Recipe</div>
-            <div class="span2">Date Bottled</div>
-            <div class="span1">Num Left</div>
-            <div class="span1">ABV</div>
+    <br><br>
 
-        </div>
+    </table>
+
+
+
     {% else %}
         <p>No bottlings defined.</p>
     {% endif %}
