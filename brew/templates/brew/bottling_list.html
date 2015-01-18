@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                     {% for bottling in bottling_list %}
-                    <tr>
+                    <tr {% if bottling.num_remaining <= 0 %}class=""{% endif %}>
                         <th scope="row">{{ bottling.id }}</th>
                         <td><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.batch }}</a> </td>
                         <td>{{ bottling.batch.recipe }}</td>

@@ -138,8 +138,7 @@ class Bottling(models.Model):
     @property
     def all_gone(self):
         """ Are there any beers leftt? """
-        return self.num_remaining > 0
-        # return false
+        return self.num_remaining <= 0
 
     @property
     def is_drinkable_in(self):
@@ -151,7 +150,6 @@ class Bottling(models.Model):
     final_measurement = models.ForeignKey(Measurement)
     date = models.DateTimeField('date bottled')
     bottle_type = models.ForeignKey(BottleType)
-    # num_bottles = models.IntegerField(default=0)
     num_bottled = models.IntegerField(default=0)
     num_remaining = models.IntegerField(default=0)
     markings = models.CharField(max_length=10, blank=True, null=True)

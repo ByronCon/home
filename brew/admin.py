@@ -1,5 +1,5 @@
 from django.contrib import admin
-from brew.models import Recipe, Batch, Measurement, Bottling, BottleType, GravityType, Ingredient
+from brew.models import Recipe, Batch, Measurement, Bottling, BottleType, GravityType, Ingredient, Sampling
 
 # Class definitions
 
@@ -34,4 +34,5 @@ admin.site.register(Bottling)
 admin.site.register(Ingredient)
 admin.site.register(BottleType)
 admin.site.register(GravityType)
+admin.site.register(Sampling)
 
