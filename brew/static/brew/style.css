@@ -2,3 +2,8 @@ body {
     padding-top: 60px;
     padding-bottom: 40px;
 }
+
+.errorlist {
+    color: #fff;
+    background-color: #c9302c;
+}

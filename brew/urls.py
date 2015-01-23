@@ -23,7 +23,14 @@ urlpatterns = patterns('',
     # Detail
     url(r'^ferment/(?P<pk>\d+)/$', views.BatchDetailView.as_view(), name='batch_detail'),
     # Create
-    url(r'^ferment/new/(?P<recipe_id>\d+)/$', views.wip2, name='batch_create'),
+    url(r'^ferment/new/$', views.batch_create, name='batch_create'),
+    # Update
+    url(r'^ferment/(?P<pk>\d+)/update/$', views.batch_update, name='batch_update'),
+    # Delete
+    url(r'^ferment/(?P<pk>\d+)/remove/$', views.batch_delete, name='batch_delete'),
+
+    # Create
+    #url(r'^ferment/new/(?P<recipe_id>\d+)/$', views.wip2, name='batch_create'),
 
     # ## Bottling
     # Index

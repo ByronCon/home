@@ -4,6 +4,19 @@
 
 {% block content %}
 
+    {% if messages %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Panel title</h3>
+        </div>
+        <div class="panel-body">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
     {% if batch_list %}
         <ul>
         {% for batch in batch_list %}

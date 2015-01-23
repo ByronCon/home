@@ -25,8 +25,8 @@ Past Brews:
     {% endfor %}
 </ol>
 
-<a href="{% url 'brew:batch_create' recipe.id %}"> </a>
-
-<a href="/brew/"><input type="submit" value="New Batch" /></a>
+<a href="{% url 'brew:batch_create' %}"> new link </a>
+<br>
+<input type="submit" value="New Batch" />
 
 {% endblock content %}

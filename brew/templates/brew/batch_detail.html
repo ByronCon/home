@@ -23,4 +23,13 @@
     <br>
     <a href="{% url 'brew:batch_index' %}">Back</a>
 
+    <br><br>
+    <a href="{% url 'brew:batch_update' batch.id %}"> update </a>
+
+
+    <form action="{% url 'brew:batch_delete' batch.id %}" method="GET">
+    <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
+
+
 {% endblock %}

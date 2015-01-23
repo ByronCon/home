@@ -1,8 +1,10 @@
 import datetime
+from django import forms
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import localtime
 from django.utils.encoding import force_text
+
 
 # Master data
 class GravityType(models.Model):
@@ -50,11 +52,10 @@ class Recipe(models.Model):
 
 
 class Batch(models.Model):
+    # An instance of a recipe.
     class Meta:
         ordering = ['-date']
 
-
-    # What it's all about
     def __str__(self):
         if self.name == '':
             friendly = 'Unnamed'
@@ -163,3 +164,11 @@ class Sampling(models.Model):
     rating = models.IntegerField(default=0)
     comment = models.CharField(max_length=200, blank=True, null=True)
 
+
+
+### Forms
+class BatchForm(forms.ModelForm):
+    """ Form used to update batches """
+    class Meta:
+        model = Batch
+        fields = ['id', 'name', 'recipe', 'description', 'date']
