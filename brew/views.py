@@ -70,12 +70,13 @@ def batch_create(request):
         # If valid data, process it
         if form.is_valid():
             form.save()
-            return HttpResponse("Hello, world. You're at a WIP page.")
+        messages.add_message(request, messages.INFO, 'Created new batch: ' + request.POST['name`'])
+        return redirect('brew:batch_index')
     # If GET, display blank form
     else:
         form = BatchForm()
 
-    return render(request, 'brew/batch_update.html', {'form': form})
+    return render(request, 'brew/batch_create.html', {'form': form})
 
 
 # Testing update of existing
@@ -102,9 +103,6 @@ def batch_delete(request, pk):
     Batch.objects.get(pk=pk).delete()
     messages.add_message(request, messages.INFO, 'Deleted ' + pk)
     return redirect('brew:batch_index')
-
-
-
 
 # ## Bottling
 class BottlingIndexView(generic.ListView):

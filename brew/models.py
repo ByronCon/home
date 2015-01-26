@@ -1,10 +1,11 @@
 import datetime
+from decimal import Decimal
 from django import forms
 from django.db import models
+from django.db.models import Min
 from django.utils import timezone
 from django.utils.timezone import localtime
 from django.utils.encoding import force_text
-
 
 # Master data
 class GravityType(models.Model):
@@ -64,19 +65,33 @@ class Batch(models.Model):
         friendly = friendly + ' (' + force_text(self.recipe) + ')'
         return friendly
 
+
+    @property
+    def time_fermenting(self):
+        """ How long was the batch in primary fermentation? """
+        if self.is_bottled:
+            end_date = self.bottling_set.aggregate(Min('date'))['date__min']
+        else:
+            end_date = timezone.now()
+
+        return end_date - self.date
+
     @property
     def age(self):
-        " How old is the batch. Only valuable while in fermenter"
-        return (timezone.now() - self.date).days + ((timezone.now() - self.date).seconds / 60 / 60 / 24)
+        """ How old is the batch. Only valuable while in fermenter"""
+
+        # Add Decimal at the before the open bracket to make it return decimal to many places.
+        return (timezone.now() - self.date).days
+               #+ ((timezone.now() - self.date).seconds / 60 / 60 / 24.0)
 
     @property
     def is_fermented(self):
-        "If FG has been recorded, it's no longer fermenting"
+        """If FG has been recorded, it's no longer fermenting"""
         return self.measurement_set.filter(gravity_type__name="FG").count() > 0
 
     @property
     def is_bottled(self):
-        "Has the beer been bottled yet? Two states; yes & no. May need to introduce a third for partially"
+        """Has the beer been bottled yet? Two states; yes & no. May need to introduce a third for partially"""
         return self.bottling_set.count() != 0
 
     @property

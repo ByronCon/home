@@ -1,0 +1,14 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Ferment{% endblock %}
+
+{% block content %}
+<form action="{% url 'brew:batch_create'  %}" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

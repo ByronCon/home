@@ -12,7 +12,20 @@
 
     Started: {{ batch.date }} <br>
     State: {{ batch.state }} <br>
-    Age: {{ batch.age }} <br>
+    <br>
+    Age: {{ batch.age}} <br>
+    Age (timesince): {{ batch.date|timesince }} <br>
+    Age (floatformat): {{ batch.age|floatformat:-2 }} <br>
+
+    Time Fermenting: {{ batch.time_fermenting }} <br>
+
+    <br><br>
+    Started: {{ batch.date }} <br>
+    Started|timesince: {{ batch.date|timesince }} <br>
+    Now: {{ batch.now }} <br>
+    Now (d): {{ batch.nowdays }} <br>
+    Age: {{ batch.age|floatformat }} <br>
+
 
     <ol>
         {% for bottling in batch.bottling_set.all %}
@@ -20,16 +33,21 @@
     {% endfor %}
     </ol>
 
-    <br>
-    <a href="{% url 'brew:batch_index' %}">Back</a>
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn btn-success" type="submit">Bottle</button>
+        </div>
 
-    <br><br>
-    <a href="{% url 'brew:batch_update' batch.id %}"> update </a>
-
-
-    <form action="{% url 'brew:batch_delete' batch.id %}" method="GET">
-    <button class="btn btn-danger" type="submit">Delete</button>
-    </form>
-
+        <div class="col-md-1">
+            <form action="{% url 'brew:batch_update' batch.id %}" method="GET">
+                <button class="btn btn-warning" type="submit">Update</button>
+            </form>
+        </div>
+        <div class="col-md-1">
+            <form action="{% url 'brew:batch_delete' batch.id %}" method="GET">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}

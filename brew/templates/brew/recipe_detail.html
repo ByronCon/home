@@ -17,16 +17,23 @@
 <input type="submit" value="Remove" />
 </form>
 
-Past Brews:
+<br><br>
 
-<ol>
-    {% for batch in recipe.batch_set.all %}
-        <li><a href="{% url 'brew:batch_detail' batch.id %}">{{ batch }}</a></li>
-    {% endfor %}
-</ol>
 
-<a href="{% url 'brew:batch_create' %}"> new link </a>
-<br>
-<input type="submit" value="New Batch" />
+{% if recipe.batch_set.all %}
+    Past Brews:
+
+    <ol>
+        {% for batch in recipe.batch_set.all %}
+            <li><a href="{% url 'brew:batch_detail' batch.id %}">{{ batch }}</a></li>
+        {% endfor %}
+    </ol>
+
+{% endif%}
+<form action="{% url 'brew:batch_create' %}" method="POST">
+    {% csrf_token %}
+    <input type='hidden' name='recipe' value='{{ recipe.id }}' />
+    <button class="btn btn-success" type="submit">Brew</button>
+</form>
 
 {% endblock content %}
