@@ -29,8 +29,12 @@ urlpatterns = patterns('',
     # Delete
     url(r'^ferment/(?P<pk>\d+)/remove/$', views.batch_delete, name='batch_delete'),
 
+    ### Measure
+    # Index
+    url(r'^measure/$', views.wip, name='measure_index'),
     # Create
-    #url(r'^ferment/new/(?P<recipe_id>\d+)/$', views.wip2, name='batch_create'),
+    url(r'^measure/new/$', views.measure_create, name='measure_create'),
+
 
     # ## Bottling
     # Index

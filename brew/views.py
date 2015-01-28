@@ -7,7 +7,7 @@ from django.views import generic
 from django.views.generic.base import TemplateView
 
 # Brew Models
-from brew.models import Recipe, Batch, Bottling, BatchForm
+from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm
 
 
 
@@ -70,8 +70,8 @@ def batch_create(request):
         # If valid data, process it
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.INFO, 'Created new batch: ' + request.POST['name`'])
-        return redirect('brew:batch_index')
+            messages.add_message(request, messages.INFO, 'Created new batch: ' + request.POST['name'])
+            return redirect('brew:batch_index')
     # If GET, display blank form
     else:
         form = BatchForm()
@@ -89,8 +89,9 @@ def batch_update(request, pk):
         # If valid data, process it
         if form.is_valid():
             form.save()
-            return HttpResponse("Trying to update. " + pk)
-    # If GET, display blank form
+            messages.add_message(request, messages.INFO, 'Updated Batch: ' + request.POST['name'])
+            return redirect('brew:batch_index')
+        # If GET, display blank form
     else:
         b = Batch.objects.get(pk=pk)
         form = BatchForm(instance=b)
@@ -103,6 +104,24 @@ def batch_delete(request, pk):
     Batch.objects.get(pk=pk).delete()
     messages.add_message(request, messages.INFO, 'Deleted ' + pk)
     return redirect('brew:batch_index')
+
+
+### Measurements
+# Create
+def measure_create(request):
+    # If POST, process data
+    if request.method == 'POST':
+        form = MeasurementForm(request.POST)
+        # If valid data, process it
+        if form.is_valid():
+            #form.save()
+            messages.add_message(request, messages.INFO, 'Created new measurement: ' + request.POST['name'])
+            return redirect('brew:batch_index')
+    # If GET, display blank form
+    else:
+        form = MeasurementForm()
+
+    return render(request, 'brew/measure_create.html', {'form': form})
 
 # ## Bottling
 class BottlingIndexView(generic.ListView):

@@ -29,11 +29,19 @@
 
     <ol>
         {% for bottling in batch.bottling_set.all %}
-        <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
-    {% endfor %}
+            <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
+        {% endfor %}
     </ol>
 
     <div class="row">
+        <div class="col-md-1">
+            <form action="{% url 'brew:measure_create' %}" method="POST">
+                {% csrf_token %}
+                <input type='hidden' name='batch' value='{{ batch.id }}' />
+                <button class="btn btn-success" type="submit">Measure</button>
+            </form>
+        </div>
+
         <div class="col-md-1">
             <button class="btn btn-success" type="submit">Bottle</button>
         </div>

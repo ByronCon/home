@@ -1,0 +1,14 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Measure{% endblock %}
+
+{% block content %}
+<form action="{% url 'brew:measure_create'  %}" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
