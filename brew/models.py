@@ -50,9 +50,9 @@ class Recipe(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True, null=True)
     ingredient = models.ManyToManyField(Ingredient)  # Refer above
-    #date = models.DateTimeField('date created')
-    #fermentation_days = models.IntegerField('guideline days in fermenter', default=7)
-    #bottled_days = models.IntegerField('min days in bottle', default=14)
+    date = models.DateTimeField('date created')
+    min_fermentation_days = models.IntegerField('guideline days in fermenter', default=7)
+    min_bottled_days = models.IntegerField('min days in bottle', default=14)
 
 class Batch(models.Model):
     # An instance of a recipe.
