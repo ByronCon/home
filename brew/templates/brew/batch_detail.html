@@ -12,27 +12,33 @@
 
     Started: {{ batch.date }} <br>
     State: {{ batch.state }} <br>
-    <br>
-    Age: {{ batch.age}} <br>
-    Age (timesince): {{ batch.date|timesince }} <br>
-    Age (floatformat): {{ batch.age|floatformat:-2 }} <br>
-
     Time Fermenting: {{ batch.time_fermenting }} <br>
 
     <br><br>
     Started: {{ batch.date }} <br>
     Started|timesince: {{ batch.date|timesince }} <br>
-    Now: {{ batch.now }} <br>
-    Now (d): {{ batch.nowdays }} <br>
     Age: {{ batch.age|floatformat }} <br>
 
 
+    <br><br>
     <ol>
-        {% for bottling in batch.bottling_set.all %}
-            <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
+        {% for measurements in batch.measurement_set.all %}
+            <li>{{ measurements.date }} | {{ measurements.gravity_type }} | {{ measurements.gravity }} | {{ measurements.temperature }}</li>
         {% endfor %}
     </ol>
 
+    <br><br>
+    <ol>
+        {% for bottling in batch.bottling_set.all %}
+            <li><a href="{% url 'brew:bottling_detail' bottling.id %}">{{ bottling.date }} | {{ bottling.abv }} | {{ bottling.age }} | </a></li>
+            <br><br>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ bottling.secondary_fermentation_complete }}%;"><span class="sr-only">{{ bottling.secondary_fermentation_complete }}% Complete</span></div>
+            </div>
+        {% endfor %}
+    </ol>
+
+    <br><br>
     <div class="row">
         <div class="col-md-1">
             <form action="{% url 'brew:measure_create' %}" method="POST">

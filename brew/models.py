@@ -12,7 +12,7 @@ class GravityType(models.Model):
     # ...
     # return friendly name
     def __str__(self):
-        return self.name
+        return self.description
 
     name = models.CharField(max_length=2)
     description = models.CharField(max_length=200, blank=True, null=True)
@@ -66,7 +66,6 @@ class Batch(models.Model):
             friendly = self.name
         friendly = friendly + ' (' + force_text(self.recipe) + ')'
         return friendly
-
 
     @property
     def time_fermenting(self):
@@ -134,9 +133,6 @@ class Bottling(models.Model):
     def __str__(self):
         return str(localtime(self.date))
 
-    def was_bottled_recently(self):  # bottled in 21 days
-        return self.date >= timezone.now() - datetime.timedelta(days=21)
-
     @property
     def abv(self):
         "Return ABV % of the bottling"
@@ -144,9 +140,18 @@ class Bottling(models.Model):
 
     @property
     def days_fermenting(self):
-        """ Return days in fermenter """
+        """ Return days in fermenter. Is this useful? """
         age = (self.date - self.batch.date)
         return age.days
+
+    @property
+    def secondary_fermentation_complete(self):
+        """ Returns a number out of 100 representing how far through bottle time we are. Used primarily for graphs"""
+        time_in_bottle = (timezone.now() - self.date).total_seconds()           # convert to seconds
+        expected_time_in_bottle = self.batch.recipe.min_bottled_days * 60 * 60 * 24  # convert to seconds
+        #return (time_in_bottle / expected_time_in_bottle) * 100
+        return 14
+
 
     @property
     def age(self):
@@ -162,7 +167,7 @@ class Bottling(models.Model):
     def is_drinkable_in(self):
         """  How many days to go before drinkable (not ready: -ve, ready: +ve) """
         # return self.was_bottled_recently()
-        return (timezone.now() - (self.date + datetime.timedelta(days=21))).days
+        return (timezone.now() - (self.date + datetime.timedelta(days=14))).days
 
     batch = models.ForeignKey(Batch)
     final_measurement = models.ForeignKey(Measurement)

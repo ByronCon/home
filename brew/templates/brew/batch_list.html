@@ -17,14 +17,26 @@
     </div>
     {% endif %}
 
-    {% if batch_list %}
-        <ul>
+    <h1>Not Bottled</h1>
+    <ul>
         {% for batch in batch_list %}
-            <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
+            {% if not batch.is_bottled %}
+                <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
+            {% endif %}
+        {% empty %}
+            <p>No batch defined.</p>
         {% endfor %}
-        </ul>
-    {% else %}
-        <p>No recipes defined.</p>
-    {% endif %}
+    </ul>
+
+    <h1>Bottled</h1>
+    <ul>
+        {% for batch in batch_list %}
+            {% if batch.is_bottled %}
+                <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
+            {% endif %}
+        {% empty %}
+            <p>No batch defined.</p>
+        {% endfor %}
+    </ul>
 
 {% endblock content %}

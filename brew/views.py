@@ -7,7 +7,7 @@ from django.views import generic
 from django.views.generic.base import TemplateView
 
 # Brew Models
-from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm
+from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm, GravityType
 
 
 
@@ -114,8 +114,10 @@ def measure_create(request):
         form = MeasurementForm(request.POST)
         # If valid data, process it
         if form.is_valid():
-            #form.save()
-            messages.add_message(request, messages.INFO, 'Created new measurement: ' + request.POST['name'])
+            form.save()
+            batch = Batch.objects.get(pk=request.POST['batch'])
+            gravity_type = str(GravityType.objects.get(pk=request.POST['gravity_type']))
+            messages.add_message(request, messages.INFO, 'Created new ' + gravity_type + ' measurement for ' + str(batch) + ' it is ' + batch.state)
             return redirect('brew:batch_index')
     # If GET, display blank form
     else:
