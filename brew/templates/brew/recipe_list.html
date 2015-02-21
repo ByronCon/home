@@ -14,4 +14,8 @@
         <p>No recipes defined.</p>
     {% endif %}
 
+    <form action="{% url 'brew:recipe_create' %}" method="get">
+        <input type="submit" value="New" />
+    </form>
+
 {% endblock content %}

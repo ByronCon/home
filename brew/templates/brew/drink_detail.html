@@ -1,0 +1,38 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Bottle{% endblock title %}
+
+{% block content %}
+    <h1>{{ bottling }}</h1>
+
+    <p> Recipe : {{ bottling.batch.recipe }}</p>
+    <p>Batch: {{ bottling.batch }}</p>
+    <p>ABV: {{ bottling.abv }}</p>
+
+    <p>Age: {{ bottling.age }}</p
+    <p> Too soon to drink: {{ bottling.was_bottled_recently }}</p>
+    <p> Number Remaining: {{ bottling.num_remaining }}</p>
+    <p>All gone? : {{ bottling.all_gone }}</p>
+
+    <p>
+    <div class="row">
+        <div class="col-md-1">
+            <form action="" method="GET">
+                <button class="btn btn-success" type="submit">Review</button>
+            </form>
+        </div>
+
+        <div class="col-md-1">
+            <form action="{% url 'brew:drink_update' bottling.id %}" method="get">
+                <button class="btn btn-warning" type="submit">Update</button>
+            </form>
+        </div>
+
+        <div class="col-md-1">
+            <form action="" method="POST">
+                <button class="btn btn-danger" type="submit">None Left</button>
+            </form>
+        </div>
+    </div>
+    </p>
+{% endblock content %}

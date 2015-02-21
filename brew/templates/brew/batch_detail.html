@@ -6,19 +6,36 @@
 
     <h1>{{ batch }}</h1>
 
+    {% if messages %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Panel title</h3>
+        </div>
+        <div class="panel-body">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
     <a href="{% url 'brew:recipe_detail' batch.recipe.id %}"> {{ batch.recipe }} </a><br>
 
     Started: {{ batch.date }} <br>
     State: {{ batch.state }} <br>
-    Time Fermenting: {{ batch.time_fermenting }} <br>
+    Time Fermenting: {{ batch.date|timesince:batch.bottled_date }} <br>
+    ABV: {{ batch.abv }}
+    {% if not batch.is_bottled %} (TBD){% endif %}
 
     <br><br>
     Started: {{ batch.date }} <br>
-    Started|timesince: {{ batch.date|timesince }} <br>
+    <b>Started|timesince: {{ batch.date|timesince:batch.bottled_date }}</b> <br>
     Age: {{ batch.age|floatformat }} <br>
 
+    <br><br>
+    Bottled Date: {{ batch.bottled_date }}<br>
 
     <br><br>
     <ol>
@@ -40,17 +57,21 @@
 
     <br><br>
     <div class="row">
-        <div class="col-md-1">
-            <form action="{% url 'brew:measure_create' %}" method="POST">
-                {% csrf_token %}
-                <input type='hidden' name='batch' value='{{ batch.id }}' />
-                <button class="btn btn-success" type="submit">Measure</button>
-            </form>
-        </div>
+        {% if not batch.is_bottled %}
+            <div class="col-md-1">
+                <form action="{% url 'brew:measure_create' %}" method="POST">
+                    {% csrf_token %}
+                    <input type='hidden' name='batch' value='{{ batch.id }}' />
+                    <button class="btn btn-success" type="submit">Measure</button>
+                </form>
+            </div>
+        {% endif %}
 
-        <div class="col-md-1">
-            <button class="btn btn-success" type="submit">Bottle</button>
-        </div>
+        {% if batch.is_fermented and not batch.is_bottled %}
+            <div class="col-md-1">
+                <button class="btn btn-success" type="submit">Bottle</button>
+            </div>
+        {% endif %}
 
         <div class="col-md-1">
             <form action="{% url 'brew:batch_update' batch.id %}" method="GET">

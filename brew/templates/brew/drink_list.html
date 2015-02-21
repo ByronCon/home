@@ -1,0 +1,22 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Bottle{% endblock title %}
+
+{% block content %}
+    <h3>Available Brews</h3>
+    {% if bottling_list %}
+        {% include "brew/drink_table.html" with bottling_list=bottling_list only %}
+    {% else %}
+        No brews available. Is it time to <a href="{% url 'brew:recipe_index' %}">get one ready?</a>
+    {% endif %}
+    <br><br>
+
+    <h3>Past Brews</h3>
+    {% if available_list %}
+        {% include "brew/drink_table.html" with bottling_list=available_list only %}
+    {% else %}
+        No past brews.
+    {% endif %}
+
+
+{% endblock content %}

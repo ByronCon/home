@@ -1,21 +1,33 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse ,Http404
 from django.contrib import messages
-from django.template import RequestContext, loader
-from django.core.urlresolvers import reverse
 from django.views import generic
 from django.views.generic.base import TemplateView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.core.urlresolvers import reverse_lazy   # need lazy as views imported before urls - ie; url reference doesn't yet exist
 
 # Brew Models
-from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm, GravityType
-
+from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm, GravityType, RecipeForm
 
 
 
 # ## Generic Views
+@login_required
+def home_page(request):
+    """ Default home page - redirect if not logged in """
+    if request.user.is_authenticated():
+        return HttpResponse("Logged in as " + (request.user.username ))
+    else:
+        return HttpResponse("Not logged in: " + request.user.username)
+
+
 class HomePageView(TemplateView):
     template_name = "brew/index.html"
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(HomePageView, self).dispatch(*args, **kwargs)
 
 def wip(request):
     return HttpResponse("Hello, world. You're at a WIP page.")
@@ -27,34 +39,55 @@ def wip2(request, recipe_id):
 
 # ## Recipe
 # Index page
-def recipe_index(request):
-    recipe_list = Recipe.objects.all()
-    context = {'recipe_list': recipe_list}
-    return render(request, 'brew/recipe_index.html', context)
-
-# Detail view of recipe
-def recipe_detail(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'brew/recipe_detail.html', {'recipe': recipe})
-
-# Recipe update -- doesn't exist?
-def recipe_update(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'brew/recipe_detail.html', {
-            'recipe': recipe,
-            'error_message': "You are trying to change " + recipe.name,
-        })
-
-
-# ## Batch
-# Index page
-class BatchIndexView(generic.ListView):
+class RecipeIndexView(generic.ListView):
     #template_name = 'brew/batch_index.html'
     #context_object_name = 'batch_list'
 
     def get_queryset(self):
         """Return all batches."""
-        return Batch.objects.all()
+        return Recipe.objects.all()
+
+
+class RecipeDetailView(generic.DetailView):
+    model = Batch
+
+
+# Detail view of recipe
+def recipe_detail(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+    return render(request, 'brew/recipe_detail.html', {'recipe': recipe})
+
+
+# Create Recipe
+class RecipeCreate(generic.CreateView):
+    form_class = RecipeForm
+    model = Recipe
+
+
+# Update recipe
+class RecipeUpdate(generic.UpdateView):
+    form_class = RecipeForm
+    model = Recipe
+
+
+# Delete recipe
+class RecipeDelete(generic.DeleteView):
+    model = Recipe
+    success_url = reverse_lazy('brew:recipe_index')
+
+# Recipe update -- doesn't exist?
+#def recipe_update(request, recipe_id):
+#    recipe = get_object_or_404(Recipe, pk=recipe_id)
+#    return render(request, 'brew/recipe_detail.html', {
+#            'recipe': recipe,
+#            'error_message': "You are trying to change " + recipe.name,
+#        })
+
+
+# ## Batch
+# Index page
+class BatchIndexView(generic.ListView):
+    model = Batch
 
 
 # Batch Detail
@@ -118,20 +151,47 @@ def measure_create(request):
             batch = Batch.objects.get(pk=request.POST['batch'])
             gravity_type = str(GravityType.objects.get(pk=request.POST['gravity_type']))
             messages.add_message(request, messages.INFO, 'Created new ' + gravity_type + ' measurement for ' + str(batch) + ' it is ' + batch.state)
-            return redirect('brew:batch_index')
+            return redirect('brew:batch_detail', batch.pk)
     # If GET, display blank form
     else:
         form = MeasurementForm()
 
     return render(request, 'brew/measure_create.html', {'form': form})
 
+
 # ## Bottling
 class BottlingIndexView(generic.ListView):
-    def get_queryset(self):
-        """Return all bottlings."""
-        return Bottling.objects.all()
+    model = Bottling
+
+    def get_context_data(self, **kwargs):
+        context = super(BottlingIndexView, self).get_context_data(**kwargs)
+        context['available_list'] = Bottling.objects.filter(num_remaining=0)
+        return context
 
 
 class BottlingDetailView(generic.DetailView):
     model = Bottling
+
+
+### Drink
+class DrinkIndexView(generic.ListView):
+    model = Bottling
+    queryset = Bottling.objects.filter(num_remaining__gt=0)
+    template_name = "brew/drink_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(DrinkIndexView, self).get_context_data(**kwargs)
+        context['available_list'] = Bottling.objects.filter(num_remaining=0)
+        return context
+
+
+class DrinkDetailView(generic.DetailView):
+    model = Bottling
+    template_name = "brew/drink_detail.html"
+
+# Update recipe
+class DrinkUpdate(generic.UpdateView):
+    #form_class = DrinkForm
+    model = Bottling
+    template_name = "brew/drink_form.html"
 

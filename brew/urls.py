@@ -3,19 +3,26 @@ from django.conf.urls import patterns, url
 from brew import views
 
 urlpatterns = patterns('',
+
     #ex: /brew/
-    url(r'^$', views.HomePageView.as_view(),name='index'),
+    url(r'^$', views.HomePageView.as_view(), name='index'),
 
 
     # Recipe index      - ex: /brew/prepare
-    url(r'^prepare/$', views.recipe_index, name='recipe_index'),
+    url(r'^prepare/$', views.RecipeIndexView.as_view(), name='recipe_index'),
 
     # Recipe detail     - ex: /brew/prepare/1/
-    url(r'^prepare/(?P<recipe_id>\d+)/$', views.recipe_detail, name='recipe_detail'),
+    url(r'^prepare/(?P<pk>\d+)/$', views.recipe_detail, name='recipe_detail_OLD'),
+    url(r'^prepare/(?P<pk>\d+)/$', views.RecipeDetailView.as_view(), name='recipe_detail'),
 
-    # Recipe Change
-    url(r'^prepare/(?P<recipe_id>\d+)/update/$', views.recipe_update, name='recipe_update'),
+    # Recipe create     - ex: /brew/prepare/new
+    url(r'^prepare/new/$', views.RecipeCreate.as_view(), name='recipe_create'),
 
+    # Recipe Change     - eg: /brew/prepare/1/update/
+    url(r'^prepare/(?P<pk>\d+)/update/$', views.RecipeUpdate.as_view(), name='recipe_update'),
+
+    # Recipe Delete     - eg: /brew/prepare/1/remove
+    url(r'^prepare/(?P<pk>\d+)/remove/$', views.RecipeDelete.as_view(), name='recipe_delete'),
 
     # ## Batch
     # Index """
@@ -39,11 +46,25 @@ urlpatterns = patterns('',
     # ## Bottling
     # Index
     url(r'bottle/$', views.BottlingIndexView.as_view(), name='bottling_index'),
-
     # Detail
     url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
 
+
+    ### Drink
+    # Index
+    url(r'enjoy/$', views.DrinkIndexView.as_view(), name='drink_index'),
+    # Detail
+    url(r'^enjoy/(?P<pk>\d+)/$', views.DrinkDetailView.as_view(), name='drink_detail'),
+    # Drink Change     - eg: /brew/prepare/1/update/
+    url(r'^enjoy/(?P<pk>\d+)/update/$', views.DrinkUpdate.as_view(), name='drink_update'),
+
+
+
     url(r'^measure', views.wip, name='measure'),
     url(r'^bottle', views.wip, name='bottle'),
-    url(r'^enjoy', views.wip, name='enjoy'),
+    #url(r'^enjoy', views.wip, name='enjoy'),
+
+
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+
 )

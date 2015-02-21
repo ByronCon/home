@@ -8,32 +8,55 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'brew:recipe_update' recipe.id %}" method="post">
-{% csrf_token %}
 {% for ingredient in recipe.ingredient.all %}
     <input type="checkbox" name="ingredient" id="ingredient{{ forloop.counter }}" value="{{ ingredient.id }}" />
     <label for="ingredient{{ forloop.counter }}">{{ ingredient }}</label><br />
 {% endfor %}
-<input type="submit" value="Remove" />
-</form>
 
 <br><br>
+<div class="row">
+    <div class="col-md-1">
+        <form action="{% url 'brew:batch_create' %}" method="POST">
+            {% csrf_token %}
+            <input type='hidden' name='recipe' value='{{ recipe.id }}' />
+            <button class="btn btn-success" type="submit">Brew</button>
+        </form>
+    </div>
 
+    <div class="col-md-1">
+        <form action="{% url 'brew:recipe_update' recipe.id %}" method="get">
+            <button class="btn btn-warning" type="submit">Update</button>
+        </form>
+    </div>
+
+    <div class="col-md-1">
+        <form action="{% url 'brew:recipe_delete' recipe.id %}" method="POST">
+            {% csrf_token %}
+            <input type='hidden' name='recipe' value='{{ recipe.id }}' />
+            <button class="btn btn-danger" type="submit">Remove</button>
+        </form>
+    </div>
+</div>
 
 {% if recipe.batch_set.all %}
-    Past Brews:
+    <h1>Active Brews:</h1>
+    <ol>
+    {% for batch in recipe.batch_set.all %}
+        {% if not batch.is_bottled %}
+            <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ol>
 
+    <h1>Past Brews:</h1>
     <ol>
         {% for batch in recipe.batch_set.all %}
-            <li><a href="{% url 'brew:batch_detail' batch.id %}">{{ batch }}</a></li>
+            {% if batch.is_bottled %}
+                <li><a href="{% url 'brew:batch_detail' batch.id %}">{{ batch }}</a></li>
+            {% endif %}
         {% endfor %}
     </ol>
 
 {% endif%}
-<form action="{% url 'brew:batch_create' %}" method="POST">
-    {% csrf_token %}
-    <input type='hidden' name='recipe' value='{{ recipe.id }}' />
-    <button class="btn btn-success" type="submit">Brew</button>
-</form>
 
 {% endblock content %}

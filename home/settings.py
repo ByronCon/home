@@ -1,3 +1,4 @@
+import django.conf.global_settings as DEFAULT_SETTINGS
 """
 Django settings for home project.
 
@@ -28,6 +29,11 @@ ALLOWED_HOSTS = []
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
+# allow request to be passed through to templates
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
+    'django.core.context_processors.request',)
+
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -49,6 +55,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
 
 ROOT_URLCONF = 'home.urls'
 
