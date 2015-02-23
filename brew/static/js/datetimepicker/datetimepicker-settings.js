@@ -3,10 +3,9 @@ window.onerror = function(errorMsg) {
 	$('#console').html($('#console').html()+'<br>'+errorMsg)
 }*/
 $('#datetimepicker').datetimepicker({
-dayOfWeekStart : 1,
-lang:'en',
-disabledDates:['1986/01/08','1986/01/09','1986/01/10'],
-startDate:	'2015/01/01'
+    dayOfWeekStart : 1,
+    lang:'en',
+    startDate:	'2015/01/01'
 });
 $('#datetimepicker').datetimepicker({value:'2015/04/15 05:03',step:10});
 

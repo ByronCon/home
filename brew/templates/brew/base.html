@@ -11,9 +11,13 @@
     <!-- Bootstrap -->
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "css/bootstrap-theme.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="{% static "brew/style.css" %}" rel="stylesheet">
+
+
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -60,7 +64,8 @@
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- OLD <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+    <script src="{% static "js/jquery.min.js" %}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static "js/bootstrap.min.js" %}"></script>
 
@@ -74,8 +79,24 @@
 
 </body>
 
-<!-- jQuery - Date Time Picker -->
+<!-- jQuery - Date Time Picker
 <link rel="stylesheet" type="text/css" href="{% static "js/datetimepicker/jquery.datetimepicker.css"%}" />
 <script src="{% static "js/datetimepicker/jquery.js" %}"></script>
 <script src="{% static "js/datetimepicker/jquery.datetimepicker.js" %}"></script>
 <script src="{% static "js/datetimepicker-settings.js" %}"></script>
+-->
+
+<!-- Bootstrap datetimepicker via http://www.malot.fr/bootstrap-datetimepicker/demo.php -->
+<script src="{% static "js/bs-datetimepicker/bootstrap-datetimepicker.js" %}"></script>
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 0
+    });
+</script>

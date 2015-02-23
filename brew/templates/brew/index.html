@@ -9,6 +9,12 @@
 	<li><a href="{% url 'brew:bottling_index' %}">Bottling</a></li>
 	</ul>
 
-<input type="text" value="" id="datetimepicker">
+<h1>new DT</h1>
+<input size="16" type="text" readonly class="form_datetime">
+
+<script type="text/javascript">
+    $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+</script>
+
 
 {% endblock content %}
