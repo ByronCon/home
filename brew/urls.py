@@ -48,7 +48,9 @@ urlpatterns = patterns('',
     url(r'bottle/$', views.BottlingIndexView.as_view(), name='bottling_index'),
     # Detail
     url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
-
+    # Create
+    #url(r'^ferment/(?P<pk>\d+)/bottle/$', views.BottlingCreateView2.as_view(), name='bottling_create2'),
+    url(r'^bottle/new/$', views.BottlingCreateView.as_view(), name='bottling_create'),
 
     ### Drink
     # Index
@@ -61,7 +63,7 @@ urlpatterns = patterns('',
 
 
     url(r'^measure', views.wip, name='measure'),
-    url(r'^bottle', views.wip, name='bottle'),
+    #url(r'^bottle', views.wip, name='bottle'),
     #url(r'^enjoy', views.wip, name='enjoy'),
 
 

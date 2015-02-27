@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy   # need lazy as views imported before urls - ie; url reference doesn't yet exist
 
 # Brew Models
-from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm, GravityType, RecipeForm
+from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm, GravityType, RecipeForm, BottlingForm
 
 
 
@@ -88,6 +88,15 @@ class RecipeDelete(generic.DeleteView):
 # Index page
 class BatchIndexView(generic.ListView):
     model = Batch
+    # Get Batches which are bottled
+    #queryset = Batch.objects.filter(is_bottled)
+
+    def get_context_data(self, **kwargs):
+        context = super(BatchIndexView, self).get_context_data(**kwargs)
+        # Get Batches which are not bottled
+        #context['inactive_list'] = Batch.objects.filter(is_bottled)
+        return context
+
 
 
 # Batch Detail
@@ -172,6 +181,10 @@ class BottlingIndexView(generic.ListView):
 class BottlingDetailView(generic.DetailView):
     model = Bottling
 
+
+class BottlingCreateView(generic.CreateView):
+    model = Bottling
+    form_class = BottlingForm
 
 ### Drink
 class DrinkIndexView(generic.ListView):

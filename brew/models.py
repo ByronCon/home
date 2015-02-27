@@ -105,7 +105,13 @@ class Batch(models.Model):
 
     @property
     def original_gravity(self):
-        return self.measurement_set.filter(gravity_type__name="OG").get().gravity
+        og_measurement = self.measurement_set.filter(gravity_type__name="OG")
+
+        # If OG, return it. Otherwise 0
+        if og_measurement:
+            return self.measurement_set.filter(gravity_type__name="OG").get().gravity
+        else:
+            return 0
 
     @property
     def bottled_date(self):
@@ -126,6 +132,11 @@ class Batch(models.Model):
     def abv(self):
         """ Return currently known ABV. Use last measurement; regardless of IG/FG """
         max_date = self.measurement_set.aggregate(Max('date'))['date__max']
+
+        # if no measurements, return 0.
+        if not max_date:
+            return 0
+
         fg = self.measurement_set.filter(date=max_date)[0].gravity
         return 131 * (self.original_gravity - fg)
 
@@ -235,10 +246,25 @@ class BatchForm(forms.ModelForm):
     class Meta:
         model = Batch
         fields = ['id', 'name', 'recipe', 'description', 'date']
-
+        widgets = {
+            'date': forms.TextInput(attrs={'class': 'form_datetime'}),
+        }
 
 class MeasurementForm(forms.ModelForm):
     """ Form to update measurements against a batch """
     class Meta:
         model = Measurement
         fields = ['batch', 'date', 'gravity_type', 'gravity', 'temperature']
+        widgets = {
+            'date': forms.TextInput(attrs={'class': 'form_datetime'}),
+        }
+
+
+class BottlingForm(forms.ModelForm):
+    """ Form to create/update bottlings """
+    class Meta:
+        model = Bottling
+        exclude = ['Batch']
+        widgets = {
+            'date': forms.TextInput(attrs={'class': 'form_datetime'}),
+        }

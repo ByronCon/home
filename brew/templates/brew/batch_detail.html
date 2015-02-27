@@ -58,7 +58,7 @@
     <br><br>
     <div class="row">
         {% if not batch.is_bottled %}
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <form action="{% url 'brew:measure_create' %}" method="POST">
                     {% csrf_token %}
                     <input type='hidden' name='batch' value='{{ batch.id }}' />
@@ -69,7 +69,11 @@
 
         {% if batch.is_fermented and not batch.is_bottled %}
             <div class="col-md-1">
-                <button class="btn btn-success" type="submit">Bottle</button>
+                <form action="{% url 'brew:bottling_create' %}" method="POST">
+                    {% csrf_token %}
+                    <input type='hidden' name='batch' value='{{ batch.id }}' />
+                    <button class="btn btn-success" type="submit">Bottle</button>
+                </form>
             </div>
         {% endif %}
 

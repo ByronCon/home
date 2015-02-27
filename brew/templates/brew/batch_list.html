@@ -3,22 +3,18 @@
 {% block title %}Ferment{% endblock title %}
 
 {% block content %}
+    <h3>Active Brews</h3>
+    {% include "brew/batch_table.html" with batch_list=batch_list only %}
 
-    {% if messages %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Panel title</h3>
-        </div>
-        <div class="panel-body">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 
-    <h1>Not Bottled</h1>
+
+    <h3>Inactive Brews</h3>
+    {% include "brew/batch_table.html" with batch_list=batch_list only %}
+
+
+
     <ul>
+       <h1>Not Bottled</h1>
         {% for batch in batch_list %}
             {% if not batch.is_bottled %}
                 <li><a href="{% url 'brew:batch_detail' batch.id %}"> {{ batch }}</a></li>

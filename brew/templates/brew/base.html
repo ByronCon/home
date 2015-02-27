@@ -1,5 +1,7 @@
-{% load staticfiles %}
-{% load brew_extras %}
+{% load staticfiles %}  <!-- Static files (css/js/etc)  -->
+{% load brew_extras %}  <!-- Custom template tags       -->
+{% load comments %}     <!-- Comments                   -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -57,7 +59,20 @@
     </nav>
 
 
-
+    <div class="container">
+        {% if messages %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Panel title</h3>
+            </div>
+            <div class="panel-body">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
 
     <div class="container">
     {% block content %}{% endblock %}

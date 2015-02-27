@@ -1,0 +1,17 @@
+{% extends "brew/base.html" %}
+
+{% block title %}Prepare{% endblock title %}
+
+{% block content %}
+<h1>Create/Update Recipe</h1>
+<form action="" method="post">{% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    {% if form.instance.pk != None %}
+        <input type="submit" value="Update" />
+    {% else %}
+        <input type="submit" value="Create" />
+    {% endif %}
+</form>
+{% endblock %}
