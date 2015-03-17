@@ -4,12 +4,12 @@
 
 {% block content %}
     <h3>Active Brews</h3>
-    {% include "brew/batch_table.html" with batch_list=batch_list only %}
+    {% include "brew/batch_table.html" with batch_list=batches_active only %}
 
 
 
     <h3>Inactive Brews</h3>
-    {% include "brew/batch_table.html" with batch_list=batch_list only %}
+    {% include "brew/batch_table.html" with batch_list=batches_inactive only %}
 
 
 
