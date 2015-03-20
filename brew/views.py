@@ -94,10 +94,15 @@ class BatchIndexView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(BatchIndexView, self).get_context_data(**kwargs)
 
+        # Get list of batches which have a Bottling
+        batch_ids = Bottling.objects.filter(num_bottled__gt=0).values_list('batch_id', flat=True)
+        Batch.objects.filter(id__in=batch_ids)
+
+
         # Active Batches are not bottled
-        context['batches_active'] = Batch.objects.filter(bottling__num_bottled__lte=0)
+        context['batches_active'] = Batch.objects.exclude(id__in=batch_ids)
         # Inactive Batches bottled
-        context['batches_inactive'] = Batch.objects.filter(bottling__num_bottled__gt=0)
+        context['batches_inactive'] = Batch.objects.filter(id__in=batch_ids)
         return context
 
 
