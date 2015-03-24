@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy   # need lazy as views imported before urls - ie; url reference doesn't yet exist
 
 # Brew Models
-from brew.models import Recipe, Batch, Bottling, BatchForm, MeasurementForm, GravityType, RecipeForm, BottlingForm
+from brew.models import Recipe, Batch, Bottling, Measurement, BatchForm, MeasurementForm, GravityType, RecipeForm, BottlingForm
 
 
 
@@ -174,6 +174,12 @@ def measure_create(request):
         form = MeasurementForm()
 
     return render(request, 'brew/measure_create.html', {'form': form})
+
+
+# Update recipe
+class MeasurementUpdate(generic.UpdateView):
+    model = Measurement
+    form_class = MeasurementForm
 
 
 # ## Bottling

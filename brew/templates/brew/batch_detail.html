@@ -40,7 +40,7 @@
     <br><br>
     <ol>
         {% for measurements in batch.measurement_set.all %}
-            <li>{{ measurements.date }} | {{ measurements.gravity_type }} | {{ measurements.gravity }} | {{ measurements.temperature }}</li>
+            <li>{{ measurements.date }} | {{ measurements.gravity_type }} | {{ measurements.gravity|floatformat:"3" }} | {{ measurements.temperature }}</li>
         {% endfor %}
     </ol>
 

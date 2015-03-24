@@ -63,6 +63,7 @@ class Recipe(models.Model):
     min_fermentation_days = models.IntegerField('guideline days in fermenter', default=7)
     min_bottled_days = models.IntegerField('min days in bottle', default=14)
 
+
 class Batch(models.Model):
     # An instance of a recipe.
     class Meta:
@@ -114,12 +115,24 @@ class Batch(models.Model):
             return 0
 
     @property
+    def last_gravity(self):
+        """ Return currently known ABV. Use last measurement; regardless of IG/FG """
+        max_date = self.measurement_set.aggregate(Max('date'))['date__max']
+
+        if not max_date:
+            fg = 0      # if no measurements, FG=0
+        else:
+            fg = self.measurement_set.filter(date=max_date)[0].gravity
+
+        return fg
+
+    @property
     def bottled_date(self):
         return self.bottling_set.aggregate(Min('date'))['date__min']
 
     @property
     def state(self):
-        "What state is the beer in?"
+        """What state is the beer in?"""
         if self.is_bottled:
             state = "bottled"
         elif self.is_fermented:
@@ -131,14 +144,17 @@ class Batch(models.Model):
     @property
     def abv(self):
         """ Return currently known ABV. Use last measurement; regardless of IG/FG """
-        max_date = self.measurement_set.aggregate(Max('date'))['date__max']
+        # max_date = self.measurement_set.aggregate(Max('date'))['date__max']
+        #
+        # # if no measurements, return 0.
+        # if not max_date:
+        #     return 0
 
-        # if no measurements, return 0.
-        if not max_date:
+        fg = self.last_gravity
+        if fg == 0:
             return 0
-
-        fg = self.measurement_set.filter(date=max_date)[0].gravity
-        return 131 * (self.original_gravity - fg)
+        else:
+            return 131 * (self.original_gravity - fg)
 
     name = models.CharField(max_length=100, blank=True, null=True)
     recipe = models.ForeignKey(Recipe)

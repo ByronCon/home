@@ -9,12 +9,20 @@
 	<li><a href="{% url 'brew:bottling_index' %}">Bottling</a></li>
 	</ul>
 
-<h1>new DT</h1>
-<input size="16" type="text" readonly class="form_datetime">
+This should be a tiled/dashboard
+    - Batches fermenting
+    - Batches ready
+    - Bottles available
 
-<script type="text/javascript">
-    $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
-</script>
+Note:
+    Batch.is_bottled counts how many Bottlings have occured.
+    BatchIndexView works out how many bottles were bottled in all Bottlings.
+    Difference will occur if there's a bottling of 0.
+        Options:
+            Automated testing - Bottlings can't have 0 bottles
+            Sync logic
+
+
 
 
 {% endblock content %}
