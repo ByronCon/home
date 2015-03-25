@@ -1,4 +1,5 @@
 {% extends "brew/base.html" %}
+{% load comments %}     <!-- Comments                   -->
 
 {% block title %}Bottle{% endblock title %}
 
@@ -36,3 +37,8 @@
     </div>
     </p>
 {% endblock content %}
+
+{% block comments %}
+    {% get_comment_count for bottling as comment_count %}.
+
+{% endblock comments %}

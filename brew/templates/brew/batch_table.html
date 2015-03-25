@@ -24,7 +24,7 @@
                             <td>{{ batch.date|timesince:batch.bottled_date }}</td>
                         {% else %}
                             <td class="{% if batch.age < 7 %}danger
-                                    {% else %}warning
+                                    {% else %}success
                                     {% endif %}">{{ batch.date|timesince }}</td>
                         {% endif %}
                         <!-- <td class="{% if batch.is_drinkable_in > 0 %}success
