@@ -43,14 +43,15 @@ urlpatterns = patterns('',
     url(r'^measure/new/$', views.measure_create, name='measure_create'),
 
 
-    # ## Bottling
-    # Index
-    url(r'bottle/$', views.BottlingIndexView.as_view(), name='bottling_index'),
-    # Detail
-    url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
-    # Create
-    #url(r'^ferment/(?P<pk>\d+)/bottle/$', views.BottlingCreateView2.as_view(), name='bottling_create2'),
-    url(r'^bottle/new/$', views.BottlingCreateView.as_view(), name='bottling_create'),
+    # not required? use enjoy model instead.
+    # # ## Bottling
+    # # Index
+    # url(r'bottle/$', views.BottlingIndexView.as_view(), name='bottling_index'),
+    # # Detail
+    # url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
+    # # Create
+    # #url(r'^ferment/(?P<pk>\d+)/bottle/$', views.BottlingCreateView2.as_view(), name='bottling_create2'),
+    # url(r'^bottle/new/$', views.BottlingCreateView.as_view(), name='bottling_create'),
 
     ### Drink
     # Index

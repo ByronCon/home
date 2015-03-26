@@ -49,7 +49,7 @@
               <li class="{% active_page request "index" %}"><a href="#">Home</a></li>
               <li class="{% active_page request "recipe_index" %}"><a href="{% url 'brew:recipe_index' %}">Prepare</a></li>
               <li class="{% active_page request "batch_index" %}"><a href="{% url 'brew:batch_index' %}">Ferment</a></li>
-              <li class="{% active_page request "bottling_index" %}"><a href="{% url 'brew:bottling_index' %}">Measure</a></li>
+              <li class="{% active_page request "bottling_index" %}"><a href="#">Measure</a></li>
               <li class="{% active_page request "measure_index" %}"><a href="{% url 'brew:measure_index' %}">Bottle</a></li>
               <li class="{% active_page request "drink_index" %}"><a href="{% url 'brew:drink_index' %}">Enjoy</a></li>
               <li class="{% active_page request "logout" %}"><a href="{% url 'logout' %}">Logout</a></li>
@@ -75,7 +75,13 @@
     </div>
 
     <div class="container">
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="container">
+        {% block comments %}
+        Comments not overridden.
+        {% endblock comments %}
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
