@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, include, url
 
 from brew import views
 
@@ -51,7 +51,7 @@ urlpatterns = patterns('',
     # url(r'^bottle/(?P<pk>\d+)/$', views.BottlingDetailView.as_view(), name='bottling_detail'),
     # # Create
     # #url(r'^ferment/(?P<pk>\d+)/bottle/$', views.BottlingCreateView2.as_view(), name='bottling_create2'),
-    # url(r'^bottle/new/$', views.BottlingCreateView.as_view(), name='bottling_create'),
+    url(r'^bottle/new/$', views.BottlingCreateView.as_view(), name='bottling_create'),
 
     ### Drink
     # Index
@@ -69,5 +69,8 @@ urlpatterns = patterns('',
 
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+
+	# Comments Framework
+#    url(r'^comments/', include('django_comments.urls')),
 
 )

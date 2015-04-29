@@ -218,7 +218,7 @@ class DrinkDetailView(generic.DetailView):
 
 # Update recipe
 class DrinkUpdate(generic.UpdateView):
-    #form_class = DrinkForm
+    form_class = BottlingForm
     model = Bottling
     template_name = "brew/drink_form.html"
 

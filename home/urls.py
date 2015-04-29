@@ -13,12 +13,12 @@ urlpatterns = patterns('',
     # Admin
     url(r'^admin/', include(admin.site.urls)),
 
-	# Comments Framework
-    (r'^comments/', include('django_comments.urls')),
+    # Comments Framework
+    url(r'^comments/', include('django_comments.urls')),
 
 
-	# Auth framework
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+    # Auth framework
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name='auth_login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
 
 )

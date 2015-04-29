@@ -266,6 +266,7 @@ class BatchForm(forms.ModelForm):
             'date': forms.TextInput(attrs={'class': 'form_datetime'}),
         }
 
+
 class MeasurementForm(forms.ModelForm):
     """ Form to update measurements against a batch """
     class Meta:
@@ -280,6 +281,7 @@ class BottlingForm(forms.ModelForm):
     """ Form to create/update bottlings """
     class Meta:
         model = Bottling
+        #fields = ['final_measurement', 'date', 'bottle_type', 'num_bottled', 'num_remaining', 'markings', 'notes']
         exclude = ['Batch']
         widgets = {
             'date': forms.TextInput(attrs={'class': 'form_datetime'}),

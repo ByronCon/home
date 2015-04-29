@@ -1,5 +1,4 @@
 {% extends "brew/base.html" %}
-{% load comments %}     <!-- Comments                   -->
 
 {% block title %}Bottle{% endblock title %}
 
@@ -10,7 +9,7 @@
     <p>Batch: {{ bottling.batch }}</p>
     <p>ABV: {{ bottling.abv }}</p>
 
-    <p>Age: {{ bottling.age }}</p
+    <p>Age: {{ bottling.age }}</p>
     <p> Too soon to drink: {{ bottling.was_bottled_recently }}</p>
     <p> Number Remaining: {{ bottling.num_remaining }}</p>
     <p>All gone? : {{ bottling.all_gone }}</p>
@@ -39,9 +38,5 @@
 {% endblock content %}
 
 {% block comments %}
-    Counted: {% get_comment_count for bottling as comment_count %} comments.
-
-    {% render_comment_list for bottling %}
-
-
+    {% include "brew/comment_post.html" with object=bottling redirect_url='brew:drink_detail' %}
 {% endblock comments %}

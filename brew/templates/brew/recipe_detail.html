@@ -60,3 +60,7 @@
 {% endif%}
 
 {% endblock content %}
+
+{% block comments %}
+    {% include "brew/comment_post.html" with object=recipe redirect_url='brew:recipe_detail' %}
+{% endblock comments %}
